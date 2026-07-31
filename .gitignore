@@ -1,0 +1,43 @@
+# Ambiente virtual
+.venv/
+
+# Cache e arquivos compilados do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variáveis de ambiente
+.env
+.env.*
+
+# Configurações locais do VS Code
+.vscode/
+
+# Cache e relatórios de testes
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs gerados pela aplicação
+logs/*.log
+
+# Banco de dados local
+data/database/*.db
+data/database/*.sqlite
+data/database/*.sqlite3
+
+# Arquivos enviados pelos usuários
+data/input/*
+!data/input/.gitkeep
+
+# Arquivos temporários
+data/temporary/*
+!data/temporary/.gitkeep
+
+# Relatórios gerados
+data/output/*
+!data/output/.gitkeep
+
+# Arquivos do Windows e macOS
+Thumbs.db
+.DS_Store
