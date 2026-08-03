@@ -26,3 +26,8 @@ Com o ambiente virtual ativado:
 
 ```powershell
 python run.py
+
+
+## Desenvolvimento
+
+O projeto será desenvolvido em etapas, priorizando organização, testes e aprendizado das tecnologias utilizadas.
