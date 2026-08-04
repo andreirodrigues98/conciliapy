@@ -2,10 +2,8 @@ from datetime import date
 from decimal import Decimal
 
 
-from app.domain.enums.status_conciliacao import StatusConciliacao
 from app.domain.enums.tipo_entrada import TipoEntrada
 from app.domain.models.registro_financeiro import RegistroFinanceiro
-from app.domain.models.resultado_conciliacao import ResultadoConciliacao
 from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao
 from app.domain.services.conciliador import Conciliador
 

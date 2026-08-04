@@ -1,8 +1,6 @@
-from decimal import Decimal
 
 from app.domain.enums.status_conciliacao import StatusConciliacao
 from app.domain.models.registro_financeiro import RegistroFinanceiro
-from app.domain.models.resultado_conciliacao import ResultadoConciliacao
 from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao
 from app.domain.models.grupo_conciliacao import GrupoConciliacao
 from app.domain.models.resultado_grupo_conciliacao import ResultadoGrupoConciliacao
@@ -16,37 +14,6 @@ class Conciliador:
             raise TypeError("A configuração deve ser uma instância de ConfiguracaoConciliacao.")
 
         self.configuracao = configuracao
-
-    def conciliar_registro(self, registro: RegistroFinanceiro) -> ResultadoConciliacao:
-
-        if not isinstance(registro, RegistroFinanceiro):
-            raise TypeError("O registro deve ser uma instância de RegistroFinanceiro.")
-
-        status = self._classificar_status(registro)
-
-        mensagem = self._criar_mensagem(status=status, registro=registro)
-
-        return ResultadoConciliacao(
-            registro=registro,
-            status=status,
-            mensagem=mensagem
-        )
-
-    def conciliar_registros(self, registros: list[RegistroFinanceiro]) -> list[ResultadoConciliacao]:
-
-        if not isinstance(registros, list):
-            raise TypeError("Os registros devem ser uma lista.")
-
-        if not registros:
-            raise ValueError("A lista não pode estar vazia.")
-
-        resultados = []
-
-        for registro in registros:
-            resultado = self.conciliar_registro(registro)
-            resultados.append(resultado)
-
-        return resultados
 
     def conciliar_grupo(self, grupo: GrupoConciliacao) -> ResultadoGrupoConciliacao:
 
@@ -165,7 +132,7 @@ class Conciliador:
 
             valores_da_chave.append(valor)
 
-            return tuple(valores_da_chave)
+        return tuple(valores_da_chave)
 
     def indexar_registros(self, registros: list[RegistroFinanceiro]) -> dict[tuple[object, ...], list[RegistroFinanceiro]]:
         """Agrupa registros pela chave de conciliacao configurada"""
@@ -226,59 +193,6 @@ class Conciliador:
             grupos.append(grupo)
 
         return grupos
-
-    def _classificar_status(self, registro:RegistroFinanceiro) -> StatusConciliacao:
-
-        if not isinstance(registro, RegistroFinanceiro):
-            raise TypeError("O registro deve ser uma instância de RegistroFinanceiro.")
-        
-        valor_previsto = registro.valor_previsto
-        valor_pago = registro.valor_pago
-        diferenca = registro.diferenca
-        tolerancia = self.configuracao.tolerancia
-
-        if valor_pago == valor_previsto:
-            return StatusConciliacao.CONCILIADO
-
-        if valor_pago == (Decimal("0.00") and valor_previsto > Decimal("0.00")):
-            return StatusConciliacao.PAGAMENTO_NAO_ENCONTRADO
-
-        diferenca_absoluta = abs(diferenca)
-
-        if diferenca_absoluta <= tolerancia:
-            return StatusConciliacao.CONCILIADO_COM_TOLERANCIA
-
-        if valor_pago > Decimal("0.00") and valor_pago < valor_previsto:
-            return StatusConciliacao.PAGAMENTO_PARCIAL
-
-        if valor_pago > valor_previsto:
-            return StatusConciliacao.PAGAMENTO_EXCEDENTE
-
-        return StatusConciliacao.VALOR_DIVERGENTE
-
-    def _criar_mensagem(self, status: StatusConciliacao, registro: RegistroFinanceiro):
-
-        diferenca_absoluta = abs(registro.diferenca)
-
-        if status == StatusConciliacao.CONCILIADO:
-            return "Os valores pagos e previstos são iguais."
-
-        if status == StatusConciliacao.CONCILIADO_COM_TOLERANCIA:
-            return f"Diferença de {diferenca_absoluta}, dentro da tolerância configurada."
-
-        if status == StatusConciliacao.PAGAMENTO_NAO_ENCONTRADO:
-            return "Nenhum pagamento foi encontrado para registro."
-
-        if status == StatusConciliacao.PAGAMENTO_PARCIAL:
-            return (f"Pagamento parcial. "
-                   f"Faltam: R$ {diferenca_absoluta:.2f}")
-
-        if status == StatusConciliacao.PAGAMENTO_EXCEDENTE:
-            return (f"Pagamento excedente. "
-                    f"R$ {diferenca_absoluta:.2f}")
-
-        return "Os valores previstos e pagos apresentam divergências!"
-        
 
 
 

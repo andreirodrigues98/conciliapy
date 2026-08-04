@@ -1,10 +1,7 @@
-from decimal import Decimal
 from dataclasses import dataclass, field
+from decimal import Decimal
 
-from app.domain.enums.status_conciliacao import StatusConciliacao
 from app.domain.models.registro_financeiro import RegistroFinanceiro
-from app.domain.models.resultado_conciliacao import ResultadoConciliacao
-from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao
 
 
 @dataclass
@@ -30,11 +27,11 @@ class GrupoConciliacao:
                 raise TypeError("A previsão deve ser uma instância de RegistroFinanceiro.")
 
         if not isinstance(self.pagamentos, list):
-            raise TypeError("As previsões devem ser uma lista.")
+            raise TypeError("Os pagamentos devem ser uma lista.")
         
         for pagamento in self.pagamentos:
             if not isinstance(pagamento, RegistroFinanceiro):
-                raise TypeError("A previsão deve ser uma instância de RegistroFinanceiro.")
+                raise TypeError("O pagamento deve ser uma instância de RegistroFinanceiro.")
 
         if not self.previsoes and not self.pagamentos:
             raise ValueError( "O grupo precisa possuir pelo menos uma previsão "

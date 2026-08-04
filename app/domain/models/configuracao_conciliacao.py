@@ -21,7 +21,7 @@ class ConfiguracaoConciliacao:
         self.nome = self.nome.strip()
 
         if not self.nome:
-            raise TypeError("O nome da configuração não deve ser vazio.")
+            raise ValueError("O nome da configuração não deve ser vazio.")
 
         if not isinstance(self.tipo_entrada, TipoEntrada):
             raise TypeError("O tipo de entrada deve ser um objeto de TipoEntrada.")

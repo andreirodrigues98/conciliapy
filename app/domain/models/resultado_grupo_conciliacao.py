@@ -1,14 +1,10 @@
-from decimal import Decimal
 from dataclasses import dataclass
+from decimal import Decimal
 
 from app.domain.enums.status_conciliacao import StatusConciliacao
-from app.domain.models.registro_financeiro import RegistroFinanceiro
-from app.domain.models.resultado_conciliacao import ResultadoConciliacao
-from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao
 from app.domain.models.grupo_conciliacao import GrupoConciliacao
 
 @dataclass
-
 class ResultadoGrupoConciliacao:
 
     grupo: GrupoConciliacao
@@ -26,16 +22,21 @@ class ResultadoGrupoConciliacao:
         if not isinstance(self.mensagem, str):
             raise TypeError("A mensagem deve ser uma string.")
 
+        self.mensagem = self.mensagem.strip()
+
+        if not self.mensagem:
+            raise ValueError("A mensagem não pode estar vazia.")
+
     @property
-    def total_previsto(self):
+    def total_previsto(self) -> Decimal:
         return self.grupo.total_previsto
 
     @property 
-    def total_pago(self):
+    def total_pago(self) -> Decimal:
         return self.grupo.total_pago
 
     @property 
-    def diferenca(self):
+    def diferenca(self) -> Decimal:
         return self.grupo.diferenca
 
 
