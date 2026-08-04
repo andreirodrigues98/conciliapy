@@ -69,6 +69,8 @@ def iniciar_aplicacao() -> None:
     ),
     ]
 
+
+
     conciliador = Conciliador(configuracao=configuracao)
 
     grupos = conciliador.criar_grupos(
@@ -76,11 +78,15 @@ def iniciar_aplicacao() -> None:
         pagamentos=pagamentos,
     )
 
-    for grupo in grupos:
+    resultados = conciliador.conciliar_grupos(
+    grupos=grupos,
+    )
+
+    for resultado in resultados:
         print("-" * 50)
-        print(f"Chave: {grupo.chave}")
-        print(f"Previsões encontradas: {len(grupo.previsoes)}")
-        print(f"Pagamentos encontrados: {len(grupo.pagamentos)}")
-        print(f"Total previsto: R$ {grupo.total_previsto:.2f}")
-        print(f"Total pago: R$ {grupo.total_pago:.2f}")
-        print(f"Diferença: R$ {grupo.diferenca:.2f}")
+        print(f"Chave: {resultado.grupo.chave}")
+        print(f"Status: {resultado.status.value}")
+        print(f"Total previsto: R$ {resultado.total_previsto:.2f}")
+        print(f"Total pago: R$ {resultado.total_pago:.2f}")
+        print(f"Diferença: R$ {resultado.diferenca:.2f}")
+        print(f"Mensagem: {resultado.mensagem}")

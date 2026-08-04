@@ -36,6 +36,11 @@ class GrupoConciliacao:
             if not isinstance(pagamento, RegistroFinanceiro):
                 raise TypeError("A previsão deve ser uma instância de RegistroFinanceiro.")
 
+        if not self.previsoes and not self.pagamentos:
+            raise ValueError( "O grupo precisa possuir pelo menos uma previsão "
+                "ou um pagamento.")
+        
+
         self.previsoes = list(self.previsoes)
         self.pagamentos = list(self.pagamentos)
 
