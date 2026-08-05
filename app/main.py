@@ -67,8 +67,6 @@ def iniciar_aplicacao() -> None:
     ),
     ]
 
-
-
     conciliador = Conciliador(configuracao=configuracao)
 
     grupos = conciliador.criar_grupos(

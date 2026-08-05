@@ -5,7 +5,6 @@ from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao
 from app.domain.models.grupo_conciliacao import GrupoConciliacao
 from app.domain.models.resultado_grupo_conciliacao import ResultadoGrupoConciliacao
 
-
 class Conciliador:
 
     def __init__(self, configuracao: ConfiguracaoConciliacao) -> None:
