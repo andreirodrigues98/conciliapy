@@ -103,7 +103,7 @@ class ConversorDataFrameRegistros:
             raise TypeError("A configuracao deve ser uma instancia de ConfiguracaoConciliacao.")
 
 
-    def _validar_mapeamento(self, dataframe: pd.DataFrame, mapeamento: dict[str, str], campos_obrigatorios=tuple[str, ...]) -> None:
+    def _validar_mapeamento(self, dataframe: pd.DataFrame, mapeamento: dict[str, str], campos_obrigatorios: tuple[str, ...]) -> None:
 
         for campo_interno in campos_obrigatorios:
 
@@ -214,7 +214,7 @@ class ConversorDataFrameRegistros:
                 "não representa um número monetário válido."
             ) from erro
     
-    def _obter_linha_origem( self, linha: pd.Series, indice: object) -> int:
+    def _obter_linha_origem(self, linha: pd.Series, indice: object) -> int:
 
         if COLUNA_LINHA_ORIGEM in linha.index:
             valor_linha = linha[COLUNA_LINHA_ORIGEM]

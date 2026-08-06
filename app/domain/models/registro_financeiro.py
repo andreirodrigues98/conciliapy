@@ -75,7 +75,7 @@ class RegistroFinanceiro:
         return self.data.year
 
     @property
-    def diferenca(self):
+    def diferenca(self) -> Decimal:
         return self.valor_pago - self.valor_previsto
 
     
