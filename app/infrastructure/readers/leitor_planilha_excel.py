@@ -1,7 +1,7 @@
 from pathlib import Path 
 import pandas as pd
 
-
+COLUNA_LINHA_ORIGEM = "__linha_origem__"
 
 class LeitorPlanilhaExcel:
 
@@ -65,7 +65,12 @@ class LeitorPlanilhaExcel:
     def _normalizar_dataframe(self, dataframe: pd.DataFrame) -> pd.DataFrame:
 
         dataframe.columns = [str(coluna).strip() for coluna in dataframe.columns]
-        dataframe = dataframe.dropna(how="all")
+        dataframe = dataframe.dropna(how="all").copy()
+
+        dataframe[COLUNA_LINHA_ORIGEM] = (
+            dataframe.index + 2
+        )
+        
         dataframe = dataframe.reset_index(drop=True)
 
         return dataframe
