@@ -1,4 +1,3 @@
-
 from app.domain.enums.status_conciliacao import StatusConciliacao
 from app.domain.models.registro_financeiro import RegistroFinanceiro
 from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao

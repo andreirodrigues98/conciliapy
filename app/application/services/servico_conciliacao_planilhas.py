@@ -3,13 +3,17 @@ from pathlib import Path
 from app.domain.models.configuracao_conciliacao import ConfiguracaoConciliacao
 from app.domain.models.resultado_grupo_conciliacao import ResultadoGrupoConciliacao
 from app.domain.services.conciliador import Conciliador
+from app.application.models.resultado_execucao_conciliacao import ResultadoExecucaoConciliacao
+from app.domain.services.calculador_resumo_conciliacao import CalculadorResumoConciliacao
+from app.infrastructure.transformers.conversor_resultados_dataframe import ConversorResultadosDataFrame
 from app.infrastructure.readers.leitor_planilha_excel import LeitorPlanilhaExcel
 from app.infrastructure.transformers.conversor_dataframe_registros import ConversorDataFrameRegistros
 
 
 class ServicoConciliacaoPlanilhas:
 
-    def __init__(self, leitor: LeitorPlanilhaExcel, conversor: ConversorDataFrameRegistros) -> None:
+    def __init__(self, leitor: LeitorPlanilhaExcel, conversor: ConversorDataFrameRegistros,
+                 calculador_resumo: CalculadorResumoConciliacao, conversor_resultados: ConversorResultadosDataFrame) -> None:
 
         if not isinstance(leitor, LeitorPlanilhaExcel):
             raise TypeError("O leitor deve ser uma instância de LeitorPlanilhaExcel.")
@@ -17,9 +21,16 @@ class ServicoConciliacaoPlanilhas:
         if not isinstance(conversor, ConversorDataFrameRegistros):
             raise TypeError("O conversor deve ser uma instância de ConversorDataFrameRegistros.")
 
+        if not isinstance(calculador_resumo, CalculadorResumoConciliacao):
+            raise TypeError("O calculador deve ser uma instância de CalculadorResumoConciliacao.")
+
+        if not isinstance(conversor_resultados, ConversorResultadosDataFrame):
+            raise TypeError("O conversor_resultados deve ser uma instância de ConversorResultadosDataFrame.")
+
         self.leitor = leitor
         self.conversor = conversor
-
+        self.calculador_resumo = calculador_resumo
+        self.conversor_resultados = conversor_resultados
 
     def executar(
             self, 
@@ -44,7 +55,15 @@ class ServicoConciliacaoPlanilhas:
 
         resultados = conciliador.conciliar_grupos(grupos)
 
-        return resultados
+        resumo = self.calculador_resumo.calcular(resultados)
+        dataframe_resultados = self.conversor_resultados.converter(resultados)
+
+        return ResultadoExecucaoConciliacao(
+            resultados=resultados, 
+            resumo=resumo,
+            dataframe_resultados=dataframe_resultados
+        )
+
 
     def _validar_configuracao(self, configuracao: ConfiguracaoConciliacao) -> None:
 

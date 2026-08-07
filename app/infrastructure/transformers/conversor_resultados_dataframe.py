@@ -56,9 +56,3 @@ class ConversorResultadosDataFrame:
         
         return " | ".join(valores_texto)
 
-        
-
-
-
-
-
