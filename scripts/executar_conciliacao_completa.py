@@ -9,10 +9,10 @@ from app.domain.services.calculador_resumo_conciliacao import CalculadorResumoCo
 from app.infrastructure.readers.leitor_planilha_excel import LeitorPlanilhaExcel
 from app.infrastructure.transformers.conversor_dataframe_registros import ConversorDataFrameRegistros
 from app.infrastructure.transformers.conversor_resultados_dataframe import ConversorResultadosDataFrame
+from app.infrastructure.reports.gerador_relatorio_excel import GeradorRelatorioExcel
 
 
 def criar_configuracao() -> ConfiguracaoConciliacao:
-    """Cria a configuração usada na execução manual."""
 
     return ConfiguracaoConciliacao(
         nome="Conciliação por pedido",
@@ -35,11 +35,12 @@ def criar_configuracao() -> ConfiguracaoConciliacao:
 
 
 def executar() -> None:
-    """Executa manualmente o fluxo completo de conciliação."""
 
     caminho_vendas = (Path("data") / "entrada" / "vendas.xlsx")
 
     caminho_pagamentos = (Path("data") / "entrada"/ "pagamentos.xlsx")
+
+    caminho_relatorio = (Path("data") / "saida" / "relatorio_conciliacao.xlsx")
 
     servico = ServicoConciliacaoPlanilhas(
         leitor=LeitorPlanilhaExcel(),
@@ -55,6 +56,10 @@ def executar() -> None:
         aba_vendas="Vendas",
         aba_pagamentos="Pagamentos",
     )
+
+    gerador_relatorio = GeradorRelatorioExcel()
+
+    caminho_gerado = gerador_relatorio.gerar(execucao, caminho_relatorio)
 
     print()
     print("=" * 60)
@@ -143,6 +148,16 @@ def executar() -> None:
         execucao.dataframe_resultados.to_string(
             index=False
         )
+    )
+
+    print()
+    print("=" * 60)
+    print("RELATÓRIO")
+    print("=" * 60)
+
+    print(
+        f"Relatório gerado em: "
+        f"{caminho_gerado}"
     )
 
 
