@@ -632,3 +632,5 @@ Git e GitHub
 Desenvolvido por Andrei Rodrigues
 
 O foco não está apenas na conciliação financeira, mas também na construção de uma aplicação organizada, extensível e com responsabilidades bem definidas.
+
+PS - Demo online: a versão pública permite executar conciliações e gerar relatórios. O histórico persistente em SQL Server está disponível na execução local do projeto.
