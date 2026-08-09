@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 
 from io import BytesIO
 from decimal import Decimal
@@ -35,6 +36,8 @@ CAMPOS_PAGAMENTOS: dict[str, str] = {
     "valor_pago": "Valor pago",
 }
 
+def banco_configurado() -> bool:
+    return bool(os.getenv("SQL_SERVER") and os.getenv("SQL_DATABASE"))
 
 def exibir_pagina_inicial() -> None:
 
@@ -46,11 +49,19 @@ def exibir_pagina_inicial() -> None:
 
     st.title("ConciliaPy")
 
-    pagina = st.sidebar.radio( "Navegação", options=["Nova conciliação", "Histórico"])
+    opcoes_navegacao = ["Nova conciliação"]
 
-    servico_historico = (criar_servico_historico())
+    if banco_configurado():
+        opcoes_navegacao.append("Histórico")
 
-    if pagina == "Histórico":
+    pagina = st.sidebar.radio("Navegação", options=opcoes_navegacao)
+
+    servico_historico = None
+
+    if banco_configurado():
+        servico_historico = (criar_servico_historico())
+
+    if (pagina == "Histórico" and servico_historico is not None):
         exibir_historico(servico_historico)
         st.stop()
 
@@ -385,24 +396,25 @@ def exibir_configuracao_execucao(tipo_entrada: TipoEntrada, arquivo_vendas, arqu
 
             st.success("Conciliação executada com sucesso.")
 
-            servico_historico = (criar_servico_historico())
+            if banco_configurado():
+                servico_historico = (criar_servico_historico())
 
-            try:
-                conciliacao_id = (
-                    servico_historico.salvar_execucao(
-                        configuracao=configuracao,
-                        execucao=execucao,
-                        arquivo_vendas=arquivo_vendas.name,
-                        arquivo_pagamentos=(arquivo_pagamentos.name)
+                try:
+                    conciliacao_id = (
+                        servico_historico.salvar_execucao(
+                            configuracao=configuracao,
+                            execucao=execucao,
+                            arquivo_vendas=arquivo_vendas.name,
+                            arquivo_pagamentos=(arquivo_pagamentos.name)
+                        )
                     )
-                )
 
-                st.session_state["conciliacao_id"] = conciliacao_id
+                    st.session_state["conciliacao_id"] = conciliacao_id
 
-                st.success(f"Conciliação salva no histórico com Id {conciliacao_id}.")
+                    st.success(f"Conciliação salva no histórico com Id {conciliacao_id}.")
 
-            except Exception:
-                st.warning("A conciliação foi executada, mas não foi possível salvá-la no histórico.")
+                except Exception:
+                    st.warning("A conciliação foi executada, mas não foi possível salvá-la no histórico.")
 
     execucao_salva = st.session_state.get("execucao_conciliacao")
 
