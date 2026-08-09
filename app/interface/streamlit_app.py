@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import os
 
+from dotenv import load_dotenv
+
 from io import BytesIO
 from decimal import Decimal
 from tempfile import TemporaryDirectory
@@ -35,6 +37,8 @@ CAMPOS_PAGAMENTOS: dict[str, str] = {
     "data": "Data do pagamento",
     "valor_pago": "Valor pago",
 }
+
+load_dotenv()
 
 def banco_configurado() -> bool:
     return bool(os.getenv("SQL_SERVER") and os.getenv("SQL_DATABASE"))
