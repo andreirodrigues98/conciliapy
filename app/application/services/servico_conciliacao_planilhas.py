@@ -39,7 +39,7 @@ class ServicoConciliacaoPlanilhas:
             caminho_pagamentos: str | Path,
             aba_vendas: str,
             aba_pagamentos: str
-    ) -> list[ResultadoGrupoConciliacao]:
+    ) -> ResultadoExecucaoConciliacao:
 
         self._validar_configuracao(configuracao)
 

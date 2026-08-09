@@ -1,43 +1,84 @@
-# Ambiente virtual
-.venv/
+# ============================================================
+# Python
+# ============================================================
 
-# Cache e arquivos compilados do Python
 __pycache__/
 *.py[cod]
 *$py.class
 
+
+# ============================================================
+# Ambiente virtual
+# ============================================================
+
+.venv/
+venv/
+env/
+
+
+# ============================================================
 # Variáveis de ambiente
+# ============================================================
+
 .env
 .env.*
 
-# Configurações locais do VS Code
-.vscode/
 
-# Cache e relatórios de testes
+# ============================================================
+# VS Code / IDE
+# ============================================================
+
+.vscode/
+.idea/
+
+
+# ============================================================
+# Testes e cobertura
+# ============================================================
+
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
 
-# Logs gerados pela aplicação
-logs/*.log
 
-# Banco de dados local
-data/database/*.db
-data/database/*.sqlite
-data/database/*.sqlite3
+# ============================================================
+# Logs
+# ============================================================
 
-# Arquivos enviados pelos usuários
-data/input/*
-!data/input/.gitkeep
+*.log
+logs/
 
+
+# ============================================================
 # Arquivos temporários
-data/temporary/*
-!data/temporary/.gitkeep
+# ============================================================
 
-# Relatórios gerados
-data/output/*
-!data/output/.gitkeep
+*.tmp
+*.temp
 
-# Arquivos do Windows e macOS
+
+# ============================================================
+# Relatórios gerados pela aplicação
+# ============================================================
+
+data/saida/*
+!data/saida/.gitkeep
+
+
+# ============================================================
+# Sistema operacional
+# ============================================================
+
 Thumbs.db
 .DS_Store
+Desktop.ini
+
+
+# ============================================================
+# Banco SQL Server local
+# ============================================================
+
+*.mdf
+*.ldf
+*.ndf

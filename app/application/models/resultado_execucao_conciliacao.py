@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 
 from app.domain.models.resultado_grupo_conciliacao import ResultadoGrupoConciliacao
-from app.domain.services.calculador_resumo_conciliacao import ResumoConciliacao
+from app.domain.models.resumo_conciliacao import ResumoConciliacao
 
 @dataclass
 class ResultadoExecucaoConciliacao:

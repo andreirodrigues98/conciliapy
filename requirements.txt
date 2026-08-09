@@ -1,3 +1,6 @@
-# serão add conforme o andamento do projeto 
 pandas
 openpyxl
+streamlit
+SQLAlchemy
+pyodbc
+python-dotenv
